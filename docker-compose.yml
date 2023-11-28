@@ -1,0 +1,71 @@
+version: '3.2'
+
+services:
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - '8086:8086'
+      #volumes:
+      #- influxdb-storage:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=graphite
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=Welcome1
+      - DOCKER_INFLUXDB_INIT_ORG=telegraf_org
+      - DOCKER_INFLUXDB_INIT_BUCKET=telegraf_bucket
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=admin_token
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+    networks:
+      - grafana-influx-net
+
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+      #volumes:
+    #- grafana-storage:/var/lib/grafana
+    #- ./grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - grafana-influx-net
+
+#  telegraf:
+#    image: telegraf:latest
+#    environment:
+#      - INFLUX_TOKEN=AoFzc8UH1Aov5QtUR2rm0tki3ALe2jeH9sMipQq6CtmomKbE_YTwfm9hU0fK_kf2s9YOAaX7LbRov7KflCl5aQ==
+#    ports:
+#      - '2003:2003'
+#    #command: ["--config", "http://influxdb:8086/api/v2/telegrafs/0c304c360918c000"]
+#    volumes:
+#      - ./telegraf.conf:/etc/telegraf/telegraf.conf
+#    depends_on:
+#      - grafana
+
+  telegraf:
+      image: telegraf:latest
+      environment:
+        - INFLUX_TOKEN=u9snL619wIrdhGaR7J7zqUUKHEMDGywu8cJY8b7nQxbHtJ0MUMRmUH-S3LxfaqgXK2fQUG4uDREguPqaW660hA==
+      ports:
+        - '2003:2003'
+      command: ["--config", "http://influxdb:8086/api/v2/telegrafs/0c3119f2f1348000"]
+      depends_on:
+        - influxdb
+      #volumes:
+      #  - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      networks:
+        - grafana-influx-net
+
+volumes:
+  grafana_data: {}
+  influxdb_data: {}
+
+networks:
+  grafana-influx-net:
+    driver: bridge

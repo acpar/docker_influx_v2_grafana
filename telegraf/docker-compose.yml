@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+    telegraf:
+      image: telegraf:latest
+      environment:
+        - INFLUX_TOKEN=tQS8UnRZwdKLMlEMDndbzRWFrT1276kMBRDnM1WMaPjI4lyLq4Jgu-cA6Y8BGSEwpgJZmOAWjmpyIoTt9kGYWA==
+      ports:
+        - '2003:2003'
+      command: ["--config", "http://192.168.1.66:8086/api/v2/telegrafs/0c3054e06bda2000"]
+      volumes:
+        - ./telegraf.conf:/etc/telegraf/telegraf.conf
+      networks:
+        - grafana-influx-network
+
+
+networks:
+  grafana-influx-network:
+    driver: bridge
