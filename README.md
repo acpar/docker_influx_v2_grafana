@@ -1,3 +1,24 @@
+1. Create influxdb
+2. Create Telegraf input configuration in influxdb
+3. Copy INFLUX_TOKEN
+4. Copy --config
+5. Change Telegraf configuration in influxdb cause telegraf will get configuration over the http
+   interval = "1s"
+   debug = true
+   urls = ["http://influxdb:8086"]
+   [[inputs.socket_listener]]
+   service_address = "tcp://:2003"
+   data_format = "graphite"
+6. Save configuration
+7. Rerun docker compose up
+8. telegraf works and listen 2003 port
+9. further need to configure Grafana
+
+
+https://github.com/rawkode/influxdb-examples/blob/master/telegraf/socket_listener/telegraf.conf
+
+
+
 # Docker solution for Gatling using Influx and Grafana [Graphite enabled]
 
 If you're a serious dev or performance engineer that leverages Gatling to run performance tests, this kit is an essential.

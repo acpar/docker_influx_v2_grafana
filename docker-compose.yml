@@ -33,30 +33,21 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      - INFLUX_ORG=telegraf_org
+      - INFLUX_TOKEN=admin_token
+      - INFLUX_BUCKET=telegraf_bucket
     networks:
       - grafana-influx-net
-
-#  telegraf:
-#    image: telegraf:latest
-#    environment:
-#      - INFLUX_TOKEN=AoFzc8UH1Aov5QtUR2rm0tki3ALe2jeH9sMipQq6CtmomKbE_YTwfm9hU0fK_kf2s9YOAaX7LbRov7KflCl5aQ==
-#    ports:
-#      - '2003:2003'
-#    #command: ["--config", "http://influxdb:8086/api/v2/telegrafs/0c304c360918c000"]
-#    volumes:
-#      - ./telegraf.conf:/etc/telegraf/telegraf.conf
-#    depends_on:
-#      - grafana
 
   telegraf:
       image: telegraf:latest
       environment:
-        - INFLUX_TOKEN=u9snL619wIrdhGaR7J7zqUUKHEMDGywu8cJY8b7nQxbHtJ0MUMRmUH-S3LxfaqgXK2fQUG4uDREguPqaW660hA==
+        - INFLUX_TOKEN=qseQzySmGs_DYFST9mgTLpEx030W7gjqy7FBg047WHSv9MgrXIfDTs-FKMFa0hwPcC9JMUz3WMCzRhEBUHqovA==
       ports:
         - '2003:2003'
-      command: ["--config", "http://influxdb:8086/api/v2/telegrafs/0c3119f2f1348000"]
+      command: ["--config", "http://influxdb:8086/api/v2/telegrafs/0c313129a3433000"]
       depends_on:
-        - influxdb
+        - grafana
       #volumes:
       #  - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
       networks:
